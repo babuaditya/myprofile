@@ -1,0 +1,102 @@
+sum(X,Y):-
+    S is X+Y,
+    write('Sum is'),write(S).
+
+max(A,B):-
+    A=B,
+    write('both are equal');
+    A>B,
+    Z is A,
+    write(Z);
+    Z is B,
+    write(Z).
+count(11).
+count(N):-
+
+    writeln(N),
+    X is N+1,
+    count(X).
+
+loop(0).
+loop(N):-N>0,
+    writeln(N),
+    X is N-1,
+    loop(X).
+factorial(0,1).
+factorial(N,X):-
+    N>0,
+    Y is N-1,
+    factorial(Y,Z),
+    X is Z*N.
+squares(21).
+squares(N):-
+    Y is N*N,
+    writeln(Y),
+    M is N+1,
+    squares(M).
+
+% N-Queens Problem Solver
+
+% The main predicate to solve the N-Queens problem and print all solutions
+queens_all(N) :-
+    range(1, N, Rows),
+    permutation(Rows, Queens),
+    safe(Queens),
+    write_solution(Queens),
+    fail.
+
+% Base case for the recursive solution - no more solutions to find
+queens_all(_).
+
+% Define the safe predicate to check if a placement is safe
+safe([]).
+safe([Queen|Queens]) :-
+    safe(Queens, Queen, 1),
+    safe(Queens).
+
+% Helper predicate to check if a queen is safe in a given column
+safe([], _, _).
+safe([OtherQueen|Queens], Queen, Offset) :-
+    Queen =\= OtherQueen + Offset,
+    Queen =\= OtherQueen - Offset,
+    NewOffset is Offset + 1,
+    safe(Queens, Queen, NewOffset).
+
+% Define the range predicate to generate a list of integers
+range(Start, End, Range) :-
+    findall(X, between(Start, End, X), Range).
+
+% Use the permutation predicate from the library to generate all permutations
+permutation([], []).
+permutation(List, [Element|Perm]) :-
+    select(Element, List, Rest),
+    permutation(Rest, Perm).
+
+% Predicate to write a solution
+write_solution(Queens) :-
+    write(Queens), nl.
+
+% Example usage:
+% To find all solutions for the 8-Queens problem, you can query queens_all(8).
+
+.
+
+queen(N,Queens):-
+range(1, N, Rows),
+permutation(Rows, Queens),
+safe(Queens).
+range(Start,End, [Start|Rest]) :-
+Start =<End,
+NewStart is Start +1,
+range(NewStart, End, Rest).
+range(End, End, []).
+safe([]).
+safe([Queen|Queens]):-
+safe(Queens, Queen, 1),
+safe(Queens).
+safe([], _, _).
+safe([OtherQueen|Queens], Queen, Offset):-
+Queen=\= OtherQueen + Offset,
+Queen=\= OtherQueen - Offset,
+NewOffset is Offset + 1,
+safe(Queens, Queen, NewOffset). 
